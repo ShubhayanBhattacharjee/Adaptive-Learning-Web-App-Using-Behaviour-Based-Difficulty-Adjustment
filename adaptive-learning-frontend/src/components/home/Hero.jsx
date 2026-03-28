@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import demoVideo from "../../assets/demo.mp4";
+// import React, { useRef } from "react";
 import "./Hero.css";
 
 /* ─── DATA ─── */
@@ -433,7 +435,8 @@ const Hero = () => {
   const [typed, setTyped] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [visible, setVisible] = useState(false);
-
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef(null);
   useEffect(() => {
     const els = document.querySelectorAll(".feature");
 
@@ -457,6 +460,16 @@ const Hero = () => {
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") {
+        setShowVideo(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
   useEffect(() => {
     const phrase = TYPING_PHRASES[phraseIdx];
     let to;
@@ -522,7 +535,12 @@ const Hero = () => {
             >
               Start for free
             </button>
-            <button className="edu-btn-ghost">Watch demo ▶</button>
+            <button
+              className="edu-btn-ghost"
+              onClick={() => setShowVideo(true)}
+            >
+              Watch demo ▶
+            </button>
           </div>
         </div>
 
@@ -633,20 +651,23 @@ const Hero = () => {
 
       {/* ═══ VIDEO ═══ */}
       <section className="video-preview">
-        {/* <h2>See EduSip in Action</h2> */}
         <p>Watch a quick demo of how our AI-powered learning platform works.</p>
-        <div className="video-container">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="demo-video"
-            poster="https://via.placeholder.com/800x450?text=EduSip+Demo"
-          >
-            <source src="/demo.mp4" type="video/mp4" />
-          </video>
-        </div>
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="demo-video"
+          onMouseEnter={() => {
+            if (videoRef.current) videoRef.current.muted = false;
+          }}
+          onMouseLeave={() => {
+            if (videoRef.current) videoRef.current.muted = true;
+          }}
+        >
+          <source src={demoVideo} type="video/mp4" />
+        </video>
       </section>
 
       {/* ═══ TESTIMONIALS ═══ */}
@@ -668,6 +689,26 @@ const Hero = () => {
           ))}
         </div>
       </section>
+
+      {showVideo && (
+        <div
+          className="video-modal"
+          onClick={() => setShowVideo(false)} // click outside closes
+        >
+          <div
+            className="video-content"
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+          >
+            <button className="close-btn" onClick={() => setShowVideo(false)}>
+              ✖
+            </button>
+
+            <video controls autoPlay className="modal-video">
+              <source src={demoVideo} type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

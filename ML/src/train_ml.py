@@ -13,7 +13,10 @@ from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
 # Load dataset
-df = pd.read_csv("data/final_dataset.csv")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_path = os.path.join(BASE_DIR, "data", "final_dataset.csv")
+
+df = pd.read_csv(data_path)
 
 X = df[["response_time", "correctness", "hint_used", "current_difficulty"]]
 

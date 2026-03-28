@@ -4,7 +4,7 @@ import numpy as np
 import joblib
 import json
 import os
-from tensorflow import keras
+from tensorflow.keras.models import load_model
 from .groq_service import ask_llm
 
 app = FastAPI()
@@ -18,16 +18,22 @@ app.add_middleware(
 
 # Load models safely
 try:
-    ml = joblib.load("models/difficulty_model.pkl")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    ml_path = os.path.join(BASE_DIR, "models", "difficulty_model.pkl")
+    dl_path = os.path.join(BASE_DIR, "models", "dkt_model.h5")
+
+    ml = joblib.load(ml_path)
+    dl = load_model(dl_path, compile=False)
 except Exception as e:
     ml = None
     print("Error loading ML model:", e)
 
-try:
-    dl = keras.models.load_model("models/dkt_model.h5", compile=False)
-except Exception as e:
-    dl = None
-    print("Error loading DL model:", e)
+# try:
+#     dl = keras.models.load_model("models/dkt_model.h5", compile=False)
+# except Exception as e:
+#     dl = None
+#     print("Error loading DL model:", e)
 
 
 # Root route

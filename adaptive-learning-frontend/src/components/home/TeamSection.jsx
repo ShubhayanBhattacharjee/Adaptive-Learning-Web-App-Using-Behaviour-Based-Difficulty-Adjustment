@@ -19,7 +19,7 @@ const TeamSection = () => {
       name: "Akashdeep Sengupta",
       roll: "23052862",
       email: "23052862@kiit.ac.in",
-      role: "Frontend",
+      role: "Anti-Cheat",
     },
     {
       name: "Trayambak Sarkar",
