@@ -10,6 +10,7 @@ API_KEY = os.getenv("GROQ_API_KEY")
 
 def ask_llm(prompt):
     try:
+        print("API KEY VALUE:", API_KEY)
         res = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers={
