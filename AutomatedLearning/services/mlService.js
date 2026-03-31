@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const ML_API = process.env.ML_API_URL;
+const ML_API = "http://127.0.0.1:8000/predict-difficulty";
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 
 // Diffiulty prediction 
@@ -14,7 +14,7 @@ exports.getDifficultyPrediction = async (data) => {
     });
 
     const response = await axios.post(
-      `${ML_API}/predict-difficulty`,
+      ML_API,
       {
         response_time: Number(data.response_time),
         correctness: Number(data.correctness),
@@ -82,7 +82,7 @@ exports.getYouTubeVideos = async (query) => {
 exports.getKnowledgePrediction = async (history) => {
   try {
     const response = await axios.post(
-      `${ML_API}/predict-knowledge`,
+      "http://127.0.0.1:8000/predict-knowledge",
       { history },
       { timeout: 5000 }
     );
